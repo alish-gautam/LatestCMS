@@ -7,11 +7,13 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.awt.*;
-public class Signup extends JFrame implements ActionListener,MouseListener{
+public class Signup extends JFrame implements ActionListener,MouseListener,ItemListener{
+    
 	JButton create;
 	JTextField usernameField,emailField,phoneNumField;
 	JPasswordField passwordField,confirmPasswordField;
 	JComboBox userComboBox;
+        JComboBox courseComboBox;
 	Pattern emailPattern;
 	String emailRegex;
 	ImageIcon titleImg;
@@ -137,10 +139,24 @@ public class Signup extends JFrame implements ActionListener,MouseListener{
 		userComboBox.setFont(new Font("Arial",Font.PLAIN,20));
 		userComboBox.setBorder(BorderFactory.createEmptyBorder());
 		userComboBox.setBackground(Color.white);
+                userComboBox.addMouseListener(this);
+                userComboBox.addItemListener(this);
 		this.add(userComboBox);
+                
+                //courses
+                String[] courses= {"Select a course","BSc Hons Computer Science","BBA","BCA","CSIT"};
+		courseComboBox=new JComboBox(courses);
+		courseComboBox.setBounds(210,480,300,30);
+		courseComboBox.setFont(new Font("Arial",Font.PLAIN,20));
+		courseComboBox.setBorder(BorderFactory.createEmptyBorder());
+		courseComboBox.setBackground(Color.white);
+                courseComboBox.addMouseListener(this);
+		this.add(courseComboBox);
+                courseComboBox.setVisible(false);
+                
 		//Create Button
 		create=new JButton("Create");
-		create.setBounds(250,520,200,30);
+		create.setBounds(250,530,200,30);
 		create.setBackground(new Color(73, 79, 85));
 		create.setForeground(Color.WHITE);
 		create.addMouseListener(this);
@@ -163,6 +179,7 @@ public class Signup extends JFrame implements ActionListener,MouseListener{
 		String phoneNumber=phoneNumField.getText();
 		char[] confirmPassword=confirmPasswordField.getPassword();
 		String userMode=userComboBox.getSelectedItem().toString();
+                String studentCourse=courseComboBox.getSelectedItem().toString();
 		char[] password=passwordField.getPassword();
 		//email regular expression
 		emailRegex="[a-zA-z0-9_\\-\\.]+[@][a-z]+[\\.][a-z]{2,3}";
@@ -175,6 +192,11 @@ public class Signup extends JFrame implements ActionListener,MouseListener{
 			if(username.equals("")||phoneNumber.equals("")||email.equals("")||userMode.equals("Select User Mode")||password.length==0||confirmPassword.length==0) {
 				JOptionPane.showMessageDialog(this, "Please fill up all the fields");
 				}
+                 
+                        else if(userMode.equals("Student")&& studentCourse.equals("Select a course")){
+                            JOptionPane.showMessageDialog(this, "Please fill up all the fields");
+                        }
+                        
 			else {
 					//cheking if pattern and entered email mathches
 					if(emailPattern.matcher(emailField.getText()).matches()) {
@@ -216,12 +238,12 @@ public class Signup extends JFrame implements ActionListener,MouseListener{
 				    	 try {
 			
 						    	Conn c=new Conn();
-								String query="insert into signup values('"+username.trim()+"','"+phoneNumber+"','"+userMode+"','"+new String(passwordChars)+"','"+email+"')";
+								String query="insert into signup values('"+username.trim()+"','"+phoneNumber+"','"+userMode+"','"+new String(passwordChars)+"','"+email+"','"+studentCourse+"')";
 								c.s.executeUpdate(query);
 								String[] response= {"OK"};
 								String successTitle="SignIn Successful!!";
 								this.dispose();
-								new FrontPage().setVisible(true);
+								new Home().setVisible(true);
 								JOptionPane.showOptionDialog(this, "Welcome to the Course Management System", successTitle, JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, titleImg, response, 0);
 						    }
 						    catch(Exception ae){
@@ -235,6 +257,7 @@ public class Signup extends JFrame implements ActionListener,MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+                
 		
 	}
 
@@ -266,4 +289,17 @@ public class Signup extends JFrame implements ActionListener,MouseListener{
 			create.setBackground(new Color(73, 79, 85));
 		}
 	}
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if(e.getStateChange()==ItemEvent.SELECTED){
+            if(userComboBox.getSelectedItem().toString().equals("Student")){ 
+                courseComboBox.setVisible(true);
+            }
+            else if(!userComboBox.getSelectedItem().toString().equals("Student")){
+                courseComboBox.setVisible(false);
+            }
+            
+        }
+    }
 }
