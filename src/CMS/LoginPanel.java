@@ -150,7 +150,7 @@ public class LoginPanel extends JFrame implements ActionListener,MouseListener{
 				ResultSet rs=con.s.executeQuery(query);
 				if(rs.next()) {
 					this.dispose();
-					new Home().setVisible(true);
+					new Home(userMode).setVisible(true);
 					String[] response= {"OK"};
 					String successTitle="SignIn Successful!!";
 					JOptionPane.showOptionDialog(this, "Welcome to the Course Management System", successTitle, JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, titleImg, response, 0);

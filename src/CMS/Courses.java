@@ -5,6 +5,11 @@
 package CMS;
 import java.awt.*;
 import javax.swing.ImageIcon;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author Acer
@@ -14,11 +19,38 @@ public class Courses extends javax.swing.JFrame {
     /**
      * Creates new form Courses
      */
-    public Courses() {
+    private void populateTable(){
+        try{
+            Conn con=new Conn();
+            String query="Select * from courses";
+            ResultSet rs=con.s.executeQuery(query);
+            
+            DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
+            //setting the row count to 0
+            model.setRowCount(0);
+//            populating the table with values
+            while(rs.next()){
+                Object[] row={
+                    rs.getInt("id"),
+                    rs.getString("courseName"),
+                    rs.getInt("Seats"),
+                    rs.getInt("NoOfYears")
+                };
+            model.addRow(row);
+            }
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    private static String userMode;
+    public Courses(String userMode) {
         initComponents();
+        this.userMode=userMode;
         this.setTitle("Courses");
          this.setLocationRelativeTo(null);
          courses.doClick();
+         populateTable();
     }
 
     /**
@@ -35,6 +67,9 @@ public class Courses extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        menuBar1 = new java.awt.MenuBar();
+        menu1 = new java.awt.Menu();
+        menu2 = new java.awt.Menu();
         sidebar = new javax.swing.JPanel();
         home = new javax.swing.JButton();
         titleImage = new javax.swing.JLabel();
@@ -43,6 +78,19 @@ public class Courses extends javax.swing.JFrame {
         tutors = new javax.swing.JButton();
         students = new javax.swing.JButton();
         logout = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        searchField = new javax.swing.JTextField();
+        searchLabel = new javax.swing.JLabel();
+        addCourse = new javax.swing.JButton();
+        editCourse = new javax.swing.JButton();
+        deleteCourse = new javax.swing.JButton();
+
+        menu1.setLabel("File");
+        menuBar1.add(menu1);
+
+        menu2.setLabel("Edit");
+        menuBar1.add(menu2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(1069, 702));
@@ -155,8 +203,82 @@ public class Courses extends javax.swing.JFrame {
                 .addComponent(students, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(258, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
+
+        jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Course Name", "Seats", "No of Years"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setGridColor(new java.awt.Color(153, 153, 153));
+        jTable1.setIntercellSpacing(new java.awt.Dimension(5, 5));
+        jTable1.setRowHeight(30);
+        jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        jTable1.setShowGrid(false);
+        jTable1.setShowVerticalLines(true);
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(1).setMinWidth(130);
+        }
+
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchFieldKeyReleased(evt);
+            }
+        });
+
+        searchLabel.setText("Search:");
+
+        addCourse.setBackground(new java.awt.Color(73, 79, 85));
+        addCourse.setForeground(new java.awt.Color(255, 255, 255));
+        addCourse.setText("Add Course");
+        addCourse.setFocusable(false);
+        addCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addCourseActionPerformed(evt);
+            }
+        });
+
+        editCourse.setBackground(new java.awt.Color(73, 79, 85));
+        editCourse.setForeground(new java.awt.Color(255, 255, 255));
+        editCourse.setText("Edit Course");
+        editCourse.setFocusable(false);
+        editCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editCourseActionPerformed(evt);
+            }
+        });
+
+        deleteCourse.setBackground(new java.awt.Color(73, 79, 85));
+        deleteCourse.setForeground(new java.awt.Color(255, 255, 255));
+        deleteCourse.setText("Delete Course");
+        deleteCourse.setFocusable(false);
+        deleteCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteCourseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,11 +286,37 @@ public class Courses extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(sidebar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 884, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(addCourse)
+                        .addGap(45, 45, 45)
+                        .addComponent(editCourse)
+                        .addGap(44, 44, 44)
+                        .addComponent(deleteCourse))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 110, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchLabel)
+                    .addComponent(addCourse)
+                    .addComponent(editCourse)
+                    .addComponent(deleteCourse))
+                .addGap(46, 46, 46)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -177,7 +325,7 @@ public class Courses extends javax.swing.JFrame {
     private void OnhomeClick(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OnhomeClick
         // TODO add your handling code here:
         this.dispose();
-        new Home().setVisible(true);
+        new Home(userMode).setVisible(true);
         home.setBackground(new Color(255, 104, 104));
         home.setForeground(Color.white);
 
@@ -192,7 +340,7 @@ public class Courses extends javax.swing.JFrame {
     private void tutorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tutorsActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        new Tutors().setVisible(true);
+        new Tutors(userMode).setVisible(true);
         tutors.setBackground(new Color(255, 104, 104));
         tutors.setForeground(Color.white);
     }//GEN-LAST:event_tutorsActionPerformed
@@ -200,7 +348,7 @@ public class Courses extends javax.swing.JFrame {
     private void studentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentsActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        new Students().setVisible(true);
+        new Students(userMode).setVisible(true);
         students.setBackground(new Color(255, 104, 104));
         students.setForeground(Color.white);
     }//GEN-LAST:event_studentsActionPerformed
@@ -211,11 +359,78 @@ public class Courses extends javax.swing.JFrame {
         courses.setForeground(new Color(0,0,0));
         logout.setBackground(new Color(255, 104, 104));
         logout.setForeground(Color.white);
-        Logout log = new Logout(this);
+        Logout log = new Logout(this,userMode);
         log.setVisible(true);
         log.setBackground(new Color(255, 104, 104));
         log.setForeground(Color.white);
     }//GEN-LAST:event_logoutActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void editCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editCourseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editCourseActionPerformed
+
+    private void addCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseActionPerformed
+        // TODO add your handling code here:
+        if(userMode.equals("Admin")){
+            AddCourse addCourseFrame=new AddCourse();
+            addCourseFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            addCourseFrame.setVisible(true);
+            
+            addCourseFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                // After the AddCourse frame is closed, update the table
+                populateTable();
+            }
+        });
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_addCourseActionPerformed
+
+    private void deleteCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCourseActionPerformed
+        // TODO add your handling code here:
+        if(userMode.equals("Admin")){
+            int selectedRow=jTable1.getSelectedRow();
+            if(selectedRow==-1){
+                JOptionPane.showMessageDialog(this, "Select a row to delete");
+            }
+            else{
+                int courseId=(int)jTable1.getValueAt(selectedRow,0);
+                int confirmDialogResult=JOptionPane.showConfirmDialog(this,"Are you sure you want to delete this course?","Confirm Deletion!",JOptionPane.YES_NO_OPTION);
+                if(confirmDialogResult==JOptionPane.YES_OPTION){
+                    try{
+                        Conn c=new Conn();
+                        String query="delete from courses where id='"+courseId+"'";
+                        c.s.executeUpdate(query);
+                        populateTable();
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        }
+        else{
+               JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);        
+        }
+        
+    }//GEN-LAST:event_deleteCourseActionPerformed
+
+    private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
+        TableRowSorter<DefaultTableModel> obj=new TableRowSorter<>(model);
+        jTable1.setRowSorter(obj);
+        obj.setRowFilter(RowFilter.regexFilter(searchField.getText()));
+        
+    }//GEN-LAST:event_searchFieldKeyReleased
   
     /**
      * @param args the command line arguments
@@ -247,16 +462,26 @@ public class Courses extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Courses().setVisible(true);
+                new Courses(userMode).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addCourse;
     private javax.swing.JLabel appName;
     private javax.swing.JButton courses;
+    private javax.swing.JButton deleteCourse;
+    private javax.swing.JButton editCourse;
     private javax.swing.JButton home;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JButton logout;
+    private java.awt.Menu menu1;
+    private java.awt.Menu menu2;
+    private java.awt.MenuBar menuBar1;
+    private javax.swing.JTextField searchField;
+    private javax.swing.JLabel searchLabel;
     private javax.swing.JPanel sidebar;
     private javax.swing.JButton students;
     private javax.swing.JLabel titleImage;

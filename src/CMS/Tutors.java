@@ -17,8 +17,10 @@ public class Tutors extends javax.swing.JFrame {
     /**
      * Creates new form Tutors
      */
-    public Tutors() {
+    private static String userMode;
+    public Tutors(String userMode) {
         initComponents();
+        this.userMode=userMode;
         this.setTitle("Tutors");
         this.setLocationRelativeTo(null);
         tutors.doClick();
@@ -181,7 +183,7 @@ public class Tutors extends javax.swing.JFrame {
     private void OnhomeClick(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OnhomeClick
         // TODO add your handling code here:
         this.dispose();
-        new Home().setVisible(true);
+        new Home(userMode).setVisible(true);
         home.setBackground(new Color(255, 104, 104));
         home.setForeground(Color.white);
     }//GEN-LAST:event_OnhomeClick
@@ -189,7 +191,7 @@ public class Tutors extends javax.swing.JFrame {
     private void coursesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coursesActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        new Courses().setVisible(true);
+        new Courses(userMode).setVisible(true);
         courses.setBackground(new Color(255, 104, 104));
         courses.setForeground(Color.white);
     }//GEN-LAST:event_coursesActionPerformed
@@ -203,7 +205,7 @@ public class Tutors extends javax.swing.JFrame {
     private void studentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentsActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        new Students().setVisible(true);
+        new Students(userMode).setVisible(true);
         students.setBackground(new Color(255, 104, 104));
         students.setForeground(Color.white);
     }//GEN-LAST:event_studentsActionPerformed
@@ -214,7 +216,7 @@ public class Tutors extends javax.swing.JFrame {
         tutors.setForeground(new Color(0,0,0));
         logout.setBackground(new Color(255, 104, 104));
         logout.setForeground(Color.white);
-        Logout log = new Logout(this);
+        Logout log = new Logout(this,userMode);
         log.setVisible(true);
         log.setBackground(new Color(255, 104, 104));
         log.setForeground(Color.white);
@@ -250,7 +252,7 @@ public class Tutors extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Tutors().setVisible(true);
+                new Tutors(userMode).setVisible(true);
             }
         });
     }

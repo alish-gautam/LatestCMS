@@ -11,14 +11,17 @@ import javax.swing.SwingUtilities;
  *
  * @author Acer
  */
-public class Logout extends javax.swing.JFrame {
 
+public class Logout extends javax.swing.JFrame {
+    static private String userMode;
+    
     /**
      * Creates new form Logout
      */
     public JFrame caller;
-    public Logout(JFrame caller) {
+    public Logout(JFrame caller,String userMode) {
         this.caller=caller;
+        this.userMode=userMode;
         initComponents();
         this.setTitle("Logout");
         this.setLocationRelativeTo(null);
@@ -125,7 +128,7 @@ public class Logout extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
         caller.dispose();
-        new Home().setVisible(true);
+        new Home(userMode).setVisible(true);
     }//GEN-LAST:event_noActionPerformed
 
     /**

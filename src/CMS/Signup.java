@@ -238,12 +238,13 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 				    	 try {
 			
 						    	Conn c=new Conn();
+                                                        //sending values to signup
 								String query="insert into signup values('"+username.trim()+"','"+phoneNumber+"','"+userMode+"','"+new String(passwordChars)+"','"+email+"','"+studentCourse+"')";
 								c.s.executeUpdate(query);
 								String[] response= {"OK"};
 								String successTitle="SignIn Successful!!";
 								this.dispose();
-								new Home().setVisible(true);
+								new Home(userMode).setVisible(true);
 								JOptionPane.showOptionDialog(this, "Welcome to the Course Management System", successTitle, JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, titleImg, response, 0);
 						    }
 						    catch(Exception ae){

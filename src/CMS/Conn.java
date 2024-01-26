@@ -11,8 +11,6 @@ public class Conn{
 		try {
 			c=DriverManager.getConnection("jdbc:mysql:///courseManagementSystem","root","meswiz");
 			s=c.createStatement();
-			Statement s1=c.createStatement();
-			Statement s2=c.createStatement();
 		}
 		catch(Exception e){
 			System.out.println(e);
