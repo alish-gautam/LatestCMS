@@ -5,6 +5,10 @@
 package CMS;
 import java.awt.*;
 import javax.swing.ImageIcon;
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Acer
@@ -15,13 +19,40 @@ public class Students extends javax.swing.JFrame {
      * Creates new form Students
      */
     private static String userMode;
+        private void populateTable(){
+        Conn c=new Conn();
+        try{
+            String query="Select * from students";
+            ResultSet rs=c.s.executeQuery(query);
+            DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            while(rs.next()){
+                Object[] row={
+                    rs.getInt("id"),
+                    rs.getString("studentName"),
+                    rs.getString("email"),
+                    rs.getLong("phone"),
+                    rs.getString("course")
+                };
+                model.addRow(row);
+            }
+            
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+    }
     public Students(String userMode) {
         initComponents();
         this.userMode=userMode;
         this.setTitle("Students");
         this.setLocationRelativeTo(null);
+        this.jTable1=jTable1;
         students.doClick();
+        populateTable();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,6 +76,13 @@ public class Students extends javax.swing.JFrame {
         tutors = new javax.swing.JButton();
         students = new javax.swing.JButton();
         logout = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        studentsTitle = new javax.swing.JLabel();
+        studentSearch = new javax.swing.JTextField();
+        addStudent = new javax.swing.JButton();
+        deleteStudent = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -161,17 +199,96 @@ public class Students extends javax.swing.JFrame {
                 .addContainerGap(253, Short.MAX_VALUE))
         );
 
+        jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Id", "Student Name", "Phone", "Email", "Course"
+            }
+        ));
+        jTable1.setGridColor(new java.awt.Color(153, 153, 153));
+        jTable1.setIntercellSpacing(new java.awt.Dimension(5, 5));
+        jTable1.setRowHeight(30);
+        jTable1.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        jTable1.setShowGrid(false);
+        jTable1.setShowVerticalLines(true);
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(1).setMinWidth(30);
+        }
+
+        studentsTitle.setFont(new java.awt.Font("Consolas", 0, 26)); // NOI18N
+        studentsTitle.setText("Students");
+
+        addStudent.setBackground(new java.awt.Color(73, 79, 85));
+        addStudent.setForeground(new java.awt.Color(255, 255, 255));
+        addStudent.setText("Add");
+        addStudent.setFocusable(false);
+        addStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addStudentActionPerformed(evt);
+            }
+        });
+
+        deleteStudent.setBackground(new java.awt.Color(73, 79, 85));
+        deleteStudent.setForeground(new java.awt.Color(255, 255, 255));
+        deleteStudent.setText("Delete");
+        deleteStudent.setFocusable(false);
+        deleteStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteStudentActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Search:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(sidebar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 884, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(studentsTitle)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(143, 143, 143)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(studentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(70, 70, 70)
+                                .addComponent(addStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(65, 65, 65)
+                                .addComponent(deleteStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(104, 104, 104)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(122, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(studentsTitle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(studentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addStudent)
+                    .addComponent(deleteStudent)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(61, 61, 61))
         );
 
         pack();
@@ -219,6 +336,29 @@ public class Students extends javax.swing.JFrame {
         log.setForeground(Color.white);
     }//GEN-LAST:event_logoutActionPerformed
 
+    private void deleteStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStudentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteStudentActionPerformed
+
+    private void addStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStudentActionPerformed
+        // TODO add your handling code here:
+          if(userMode.equals("Admin")){
+            AddStudent addStudentFrame=new AddStudent();
+            addStudentFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            addStudentFrame.setVisible(true);
+            
+            addStudentFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                // After the AddCourse frame is closed, update the table
+                populateTable();
+            }
+        });
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_addStudentActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -255,12 +395,19 @@ public class Students extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addStudent;
     private javax.swing.JLabel appName;
     private javax.swing.JButton courses;
+    private javax.swing.JButton deleteStudent;
     private javax.swing.JButton home;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JButton logout;
     private javax.swing.JPanel sidebar;
+    private javax.swing.JTextField studentSearch;
     private javax.swing.JButton students;
+    private javax.swing.JLabel studentsTitle;
     private javax.swing.JLabel titleImage;
     private javax.swing.JButton tutors;
     // End of variables declaration//GEN-END:variables

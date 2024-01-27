@@ -7,13 +7,14 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.awt.*;
+import java.sql.*; 
 public class Signup extends JFrame implements ActionListener,MouseListener,ItemListener{
     
 	JButton create;
 	JTextField usernameField,emailField,phoneNumField;
 	JPasswordField passwordField,confirmPasswordField;
 	JComboBox userComboBox;
-        JComboBox courseComboBox;
+        JComboBox courseComboBox,moduleComboBox;
 	Pattern emailPattern;
 	String emailRegex;
 	ImageIcon titleImg;
@@ -154,6 +155,17 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 		this.add(courseComboBox);
                 courseComboBox.setVisible(false);
                 
+                String[] modules= {"Select a module","Numerical Methods and Concurrency","Object Oriented Programming",
+                    "Concepts and Technologies of AI","Academic Skills","Internet SoftWare Architecture"};
+		moduleComboBox=new JComboBox(modules);
+		moduleComboBox.setBounds(210,480,300,30);
+		moduleComboBox.setFont(new Font("Arial",Font.PLAIN,20));
+		moduleComboBox.setBorder(BorderFactory.createEmptyBorder());
+		moduleComboBox.setBackground(Color.white);
+                moduleComboBox.addMouseListener(this);
+		this.add(moduleComboBox);
+                moduleComboBox.setVisible(false);
+                
 		//Create Button
 		create=new JButton("Create");
 		create.setBounds(250,530,200,30);
@@ -165,7 +177,7 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 		create.addActionListener(this);
 		create.setFocusable(false);
 		this.add(create);
-		
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(700,700);
 		this.setLocationRelativeTo(null);
@@ -197,8 +209,24 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
                             JOptionPane.showMessageDialog(this, "Please fill up all the fields");
                         }
                         
+                        
 			else {
 					//cheking if pattern and entered email mathches
+                                        try{
+                                            Conn c=new Conn();
+                                            String query="select username from signup where username=?";
+                                            PreparedStatement stmt=c.getPreparedStatement(query);
+                                            stmt.setString(1,username.trim());
+                                            ResultSet rs=stmt.executeQuery();
+                                            if(rs.next()){
+                                                JOptionPane.showMessageDialog(this, "Username already exists."
+                                                        + " Please choose a different username.", "Error", JOptionPane.ERROR_MESSAGE);
+                                                return;
+                                            }
+                                        }
+                                        catch(Exception ea){
+                                            ea.printStackTrace();
+                                        }
 					if(emailPattern.matcher(emailField.getText()).matches()) {
 						email=emailField.getText();
 						emailField.setBorder(BorderFactory.createLineBorder(Color.gray));
@@ -237,15 +265,38 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 				    		confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.gray));
 				    	 try {
 			
-						    	Conn c=new Conn();
+                                               Conn c=new Conn();
                                                         //sending values to signup
-								String query="insert into signup values('"+username.trim()+"','"+phoneNumber+"','"+userMode+"','"+new String(passwordChars)+"','"+email+"','"+studentCourse+"')";
-								c.s.executeUpdate(query);
-								String[] response= {"OK"};
-								String successTitle="SignIn Successful!!";
-								this.dispose();
-								new Home(userMode).setVisible(true);
-								JOptionPane.showOptionDialog(this, "Welcome to the Course Management System", successTitle, JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, titleImg, response, 0);
+                                               String query="insert into signup values('"+username.trim()+"','"+phoneNumber+"','"+userMode+"','"+new String(passwordChars)+"','"+email+"','"+studentCourse+"')";
+                                               c.s.executeUpdate(query);
+                                               String[] response= {"OK"};
+                                               String successTitle="SignIn Successful!!";
+                                               this.dispose();
+                                                   switch(userMode){
+                                                            case "Student":
+                                                                String studentQuery="insert into students(studentName,email,phone,course) Values(?,?,?,?)";
+                                                                PreparedStatement stdSmt=c.getPreparedStatement(studentQuery);
+                                                                stdSmt.setString(1,username.trim());
+                                                                stdSmt.setString(2,email);
+                                                                stdSmt.setString(3,phoneNumber);
+                                                                stdSmt.setString(4, studentCourse);
+                                                                stdSmt.executeUpdate();
+                                                                        
+                                                            case "Teacher":
+                                                                String teacherQuery = "INSERT INTO tutors (tutorName, email, phone) VALUES (?, ?, ?)";
+                                                                PreparedStatement teacherStmt = c.getPreparedStatement(teacherQuery);
+                                                                teacherStmt.setString(1, username.trim());
+                                                                teacherStmt.setString(2, email);
+                                                                teacherStmt.setString(3, phoneNumber);
+                                                                teacherStmt.executeUpdate();
+                                                              
+                                                                }
+                                                            
+                                                                
+                                                   
+                                                                        
+                                                new Home(userMode).setVisible(true);
+                                                JOptionPane.showOptionDialog(this, "Welcome to the Course Management System", successTitle, JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, titleImg, response, 0);
 						    }
 						    catch(Exception ae){
 						    	ae.printStackTrace();
@@ -300,6 +351,12 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
             else if(!userComboBox.getSelectedItem().toString().equals("Student")){
                 courseComboBox.setVisible(false);
             }
+//            if(userComboBox.getSelectedItem().toString().equals("Teacher")){
+//                moduleComboBox.setVisible(true);
+//            }
+//            else if(!userComboBox.getSelectedItem().toString().equals("Teacher")){
+//                moduleComboBox.setVisible(false);
+//            }
             
         }
     }

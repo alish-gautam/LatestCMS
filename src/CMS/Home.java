@@ -7,6 +7,7 @@ package CMS;
 import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import java.sql.*;
 
 /**
  *
@@ -24,8 +25,74 @@ public class Home extends javax.swing.JFrame {
         this.setTitle("Home");
         this.setLocationRelativeTo(null);
         home.doClick();
+        updateTotalCourse();
+        updateTotalStudents();
+        updateTotalTutors();
     }
-
+    public static int totalCourseCounter(){
+        Conn c=new Conn();
+        int count=0;
+        
+        try{
+            String query="select COUNT(*) from courses";
+            PreparedStatement statement=c.getPreparedStatement(query);
+            ResultSet resultset=statement.executeQuery();
+            if(resultset.next()){
+                count=resultset.getInt(1);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+    public void updateTotalCourse(){
+        int totalCourseCount=totalCourseCounter();
+        totalCourses.setText(String.valueOf(totalCourseCount));
+    }
+    public static int totalStudentsCounter(){
+         Conn c=new Conn();
+        int count=0;
+        
+        try{
+            String query="select COUNT(*) from students";
+            PreparedStatement statement=c.getPreparedStatement(query);
+            ResultSet resultset=statement.executeQuery();
+            if(resultset.next()){
+                count=resultset.getInt(1);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+    public void updateTotalStudents(){
+        int totalStudentsCount=totalStudentsCounter();
+        totalStudents.setText(String.valueOf(totalStudentsCount));
+    }
+    
+      public static int totalTutorsCounter(){
+         Conn c=new Conn();
+        int count=0;
+        
+        try{
+            String query="select COUNT(*) from tutors";
+            PreparedStatement statement=c.getPreparedStatement(query);
+            ResultSet resultset=statement.executeQuery();
+            if(resultset.next()){
+                count=resultset.getInt(1);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return count;
+    }
+    public void updateTotalTutors(){
+        int totalTutorsCount=totalTutorsCounter();
+        totalTeachers.setText(String.valueOf(totalTutorsCount));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,10 +119,13 @@ public class Home extends javax.swing.JFrame {
         homeTitle = new javax.swing.JLabel();
         totalCoursesPanel = new javax.swing.JPanel();
         totalCoursesLabel = new javax.swing.JLabel();
+        totalCourses = new javax.swing.JLabel();
         totalTeachersPanel = new javax.swing.JPanel();
         totalTeachersLabel = new javax.swing.JLabel();
+        totalTeachers = new javax.swing.JLabel();
         totalStudentsPanel = new javax.swing.JPanel();
         totalStudentsLabel = new javax.swing.JLabel();
+        totalStudents = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -167,75 +237,104 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(students, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(240, Short.MAX_VALUE))
+                .addContainerGap(230, Short.MAX_VALUE))
         );
 
         homeTitle.setFont(new java.awt.Font("Consolas", 0, 26)); // NOI18N
         homeTitle.setText("Home");
 
-        totalCoursesPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        totalCoursesPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         totalCoursesLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         totalCoursesLabel.setText("Total Courses");
+
+        totalCourses.setFont(new java.awt.Font("Arial", 1, 28)); // NOI18N
+        totalCourses.setText("0");
 
         javax.swing.GroupLayout totalCoursesPanelLayout = new javax.swing.GroupLayout(totalCoursesPanel);
         totalCoursesPanel.setLayout(totalCoursesPanelLayout);
         totalCoursesPanelLayout.setHorizontalGroup(
             totalCoursesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(totalCoursesPanelLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(totalCoursesLabel)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGroup(totalCoursesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(totalCoursesPanelLayout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(totalCoursesLabel))
+                    .addGroup(totalCoursesPanelLayout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(totalCourses)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         totalCoursesPanelLayout.setVerticalGroup(
             totalCoursesPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(totalCoursesPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(totalCoursesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(totalCourses)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
-        totalTeachersPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        totalTeachersPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         totalTeachersLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         totalTeachersLabel.setText("Total Teachers");
+
+        totalTeachers.setFont(new java.awt.Font("Arial", 1, 28)); // NOI18N
+        totalTeachers.setText("0");
 
         javax.swing.GroupLayout totalTeachersPanelLayout = new javax.swing.GroupLayout(totalTeachersPanel);
         totalTeachersPanel.setLayout(totalTeachersPanelLayout);
         totalTeachersPanelLayout.setHorizontalGroup(
             totalTeachersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(totalTeachersPanelLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(totalTeachersLabel)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addGroup(totalTeachersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(totalTeachersPanelLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(totalTeachersLabel))
+                    .addGroup(totalTeachersPanelLayout.createSequentialGroup()
+                        .addGap(87, 87, 87)
+                        .addComponent(totalTeachers)))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         totalTeachersPanelLayout.setVerticalGroup(
             totalTeachersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(totalTeachersPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(totalTeachersLabel)
+                .addGap(18, 18, 18)
+                .addComponent(totalTeachers)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        totalStudentsPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        totalStudentsPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         totalStudentsLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         totalStudentsLabel.setText("Total Students");
+
+        totalStudents.setFont(new java.awt.Font("Arial", 1, 28)); // NOI18N
+        totalStudents.setText("0");
 
         javax.swing.GroupLayout totalStudentsPanelLayout = new javax.swing.GroupLayout(totalStudentsPanel);
         totalStudentsPanel.setLayout(totalStudentsPanelLayout);
         totalStudentsPanelLayout.setHorizontalGroup(
             totalStudentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(totalStudentsPanelLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, totalStudentsPanelLayout.createSequentialGroup()
+                .addContainerGap(38, Short.MAX_VALUE)
                 .addComponent(totalStudentsLabel)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGap(30, 30, 30))
+            .addGroup(totalStudentsPanelLayout.createSequentialGroup()
+                .addGap(83, 83, 83)
+                .addComponent(totalStudents)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         totalStudentsPanelLayout.setVerticalGroup(
             totalStudentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(totalStudentsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(totalStudentsLabel)
+                .addGap(18, 18, 18)
+                .addComponent(totalStudents)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -274,7 +373,7 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(totalTeachersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalStudentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalCoursesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(508, Short.MAX_VALUE))
         );
 
         pack();
@@ -369,10 +468,13 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel sidebar;
     private javax.swing.JButton students;
     private javax.swing.JLabel titleImage;
+    private javax.swing.JLabel totalCourses;
     private javax.swing.JLabel totalCoursesLabel;
     private javax.swing.JPanel totalCoursesPanel;
+    private javax.swing.JLabel totalStudents;
     private javax.swing.JLabel totalStudentsLabel;
     private javax.swing.JPanel totalStudentsPanel;
+    private javax.swing.JLabel totalTeachers;
     private javax.swing.JLabel totalTeachersLabel;
     private javax.swing.JPanel totalTeachersPanel;
     private javax.swing.JButton tutors;

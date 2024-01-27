@@ -16,5 +16,7 @@ public class Conn{
 			System.out.println(e);
 		}
 	}
-
+        public PreparedStatement getPreparedStatement(String query) throws SQLException {
+        return c.prepareStatement(query);
+    }
 }

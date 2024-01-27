@@ -19,7 +19,7 @@ public class Courses extends javax.swing.JFrame {
     /**
      * Creates new form Courses
      */
-    private void populateTable(){
+    public void populateTable(){
         try{
             Conn con=new Conn();
             String query="Select * from courses";
@@ -34,7 +34,8 @@ public class Courses extends javax.swing.JFrame {
                     rs.getInt("id"),
                     rs.getString("courseName"),
                     rs.getInt("Seats"),
-                    rs.getInt("NoOfYears")
+                    rs.getInt("NoOfYears"),
+                    rs.getString("available")
                 };
             model.addRow(row);
             }
@@ -83,7 +84,7 @@ public class Courses extends javax.swing.JFrame {
         searchField = new javax.swing.JTextField();
         searchLabel = new javax.swing.JLabel();
         addCourse = new javax.swing.JButton();
-        editCourse = new javax.swing.JButton();
+        cancelCourse = new javax.swing.JButton();
         deleteCourse = new javax.swing.JButton();
 
         menu1.setLabel("File");
@@ -209,17 +210,17 @@ public class Courses extends javax.swing.JFrame {
         jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Course Name", "Seats", "No of Years"
+                "ID", "Course Name", "Seats", "No of Years", "Available"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -229,7 +230,7 @@ public class Courses extends javax.swing.JFrame {
         jTable1.setGridColor(new java.awt.Color(153, 153, 153));
         jTable1.setIntercellSpacing(new java.awt.Dimension(5, 5));
         jTable1.setRowHeight(30);
-        jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        jTable1.setSelectionBackground(new java.awt.Color(204, 204, 204));
         jTable1.setShowGrid(false);
         jTable1.setShowVerticalLines(true);
         jScrollPane1.setViewportView(jTable1);
@@ -260,13 +261,13 @@ public class Courses extends javax.swing.JFrame {
             }
         });
 
-        editCourse.setBackground(new java.awt.Color(73, 79, 85));
-        editCourse.setForeground(new java.awt.Color(255, 255, 255));
-        editCourse.setText("Edit Course");
-        editCourse.setFocusable(false);
-        editCourse.addActionListener(new java.awt.event.ActionListener() {
+        cancelCourse.setBackground(new java.awt.Color(73, 79, 85));
+        cancelCourse.setForeground(new java.awt.Color(255, 255, 255));
+        cancelCourse.setText("Course Availability");
+        cancelCourse.setFocusable(false);
+        cancelCourse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editCourseActionPerformed(evt);
+                cancelCourseActionPerformed(evt);
             }
         });
 
@@ -291,11 +292,11 @@ public class Courses extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
                         .addComponent(addCourse)
                         .addGap(45, 45, 45)
-                        .addComponent(editCourse)
+                        .addComponent(cancelCourse)
                         .addGap(44, 44, 44)
                         .addComponent(deleteCourse))
                     .addGroup(layout.createSequentialGroup()
@@ -309,10 +310,10 @@ public class Courses extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchLabel)
                     .addComponent(addCourse)
-                    .addComponent(editCourse)
+                    .addComponent(cancelCourse)
                     .addComponent(deleteCourse))
                 .addGap(46, 46, 46)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -369,9 +370,30 @@ public class Courses extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
 
-    private void editCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editCourseActionPerformed
+    private void cancelCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelCourseActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_editCourseActionPerformed
+        if(userMode.equals("Admin")){
+            int selectedRow=jTable1.getSelectedRow();
+            if(selectedRow==-1){
+                JOptionPane.showMessageDialog(this, "Select a course to cancel");
+            }
+            else{
+                CancelCourse cancelCourse=new CancelCourse(jTable1);
+                cancelCourse.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+                cancelCourse.setVisible(true);
+                cancelCourse.addWindowListener(new java.awt.event.WindowAdapter() {
+                public void windowClosed(java.awt.event.WindowEvent evt) {
+                // After the AddCourse frame is closed, update the table
+                populateTable();
+            }
+            });
+            }
+            
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_cancelCourseActionPerformed
 
     private void addCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseActionPerformed
         // TODO add your handling code here:
@@ -398,7 +420,7 @@ public class Courses extends javax.swing.JFrame {
         if(userMode.equals("Admin")){
             int selectedRow=jTable1.getSelectedRow();
             if(selectedRow==-1){
-                JOptionPane.showMessageDialog(this, "Select a row to delete");
+                JOptionPane.showMessageDialog(this, "Select a course to delete");
             }
             else{
                 int courseId=(int)jTable1.getValueAt(selectedRow,0);
@@ -470,9 +492,9 @@ public class Courses extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCourse;
     private javax.swing.JLabel appName;
+    private javax.swing.JButton cancelCourse;
     private javax.swing.JButton courses;
     private javax.swing.JButton deleteCourse;
-    private javax.swing.JButton editCourse;
     private javax.swing.JButton home;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
