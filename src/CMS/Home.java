@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,6 +19,27 @@ public class Home extends javax.swing.JFrame {
     /**
      * Creates new form FrontPage
      */
+    public void populateTable(){
+        Conn c=new Conn();
+        String query="Select * from activity";
+        try{
+            ResultSet rs=c.s.executeQuery(query);
+            DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            
+            while(rs.next()){
+                Object[] row={
+                    rs.getInt("id"),
+                    rs.getString("activityName")
+                };
+                model.addRow(row);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+    }
     static private String userMode;
     public Home(String userMode) {
         initComponents();
@@ -28,6 +50,7 @@ public class Home extends javax.swing.JFrame {
         updateTotalCourse();
         updateTotalStudents();
         updateTotalTutors();
+        populateTable();
     }
     public static int totalCourseCounter(){
         Conn c=new Conn();
@@ -126,8 +149,11 @@ public class Home extends javax.swing.JFrame {
         totalStudentsPanel = new javax.swing.JPanel();
         totalStudentsLabel = new javax.swing.JLabel();
         totalStudents = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         sidebar.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -338,6 +364,29 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jTable1.setBackground(new java.awt.Color(204, 204, 255));
+        jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "ID", "Activity Name"
+            }
+        ));
+        jTable1.setIntercellSpacing(new java.awt.Dimension(5, 5));
+        jTable1.setRowHeight(30);
+        jTable1.setShowGrid(true);
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setMinWidth(80);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(80);
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(80);
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -345,19 +394,25 @@ public class Home extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(sidebar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(homeTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(802, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(totalCoursesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(homeTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(802, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addComponent(totalCoursesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(totalTeachersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(118, 118, 118)
+                                .addComponent(totalStudentsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(totalTeachersPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(118, 118, 118)
-                        .addComponent(totalStudentsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(106, 106, 106))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -373,7 +428,9 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(totalTeachersPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalStudentsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalCoursesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(508, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -464,6 +521,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton courses;
     private javax.swing.JButton home;
     private javax.swing.JLabel homeTitle;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JButton logout;
     private javax.swing.JPanel sidebar;
     private javax.swing.JButton students;

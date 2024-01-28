@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
+import java.sql.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -146,7 +147,11 @@ public class LoginPanel extends JFrame implements ActionListener,MouseListener{
 			else {
 			String query="select username,password,usermode from signup where username='"+username+"'and"
 					+ " password='"+new String(password)+"' and usermode='"+userMode+"'";
+                        String activityQuery="Insert into activity(activityName) values(?) ";
 			try {
+                                PreparedStatement statement=con.getPreparedStatement(activityQuery);
+                                statement.setString(1,"Existing user "+username+" recently logged in.");
+                                statement.executeUpdate();
 				ResultSet rs=con.s.executeQuery(query);
 				if(rs.next()) {
 					this.dispose();

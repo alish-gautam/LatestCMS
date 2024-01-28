@@ -10,7 +10,7 @@ import java.awt.*;
 import java.sql.*; 
 public class Signup extends JFrame implements ActionListener,MouseListener,ItemListener{
     
-	JButton create;
+	JButton create,login;
 	JTextField usernameField,emailField,phoneNumField;
 	JPasswordField passwordField,confirmPasswordField;
 	JComboBox userComboBox;
@@ -18,7 +18,26 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 	Pattern emailPattern;
 	String emailRegex;
 	ImageIcon titleImg;
+          private void setComboBox(){
+        Conn c=new Conn();
+        String query="Select courseName from courses";
+        try{
+            PreparedStatement stmt=c.getPreparedStatement(query);
+            ResultSet resultSet=stmt.executeQuery();
+          DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+            while (resultSet.next()) {
+                String value = resultSet.getString("courseName");
+                model.addElement(value);
+            }
+            
+            courseComboBox.setModel(model);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 	Signup(){
+                
 		this.setTitle("SignUp Panel");
 		JLabel title=new JLabel("Welcome to the Signup Panel");
 		title.setBounds(150,20,500,40);
@@ -146,7 +165,7 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
                 
                 //courses
                 String[] courses= {"Select a course","BSc Hons Computer Science","BBA","BCA","CSIT"};
-		courseComboBox=new JComboBox(courses);
+		courseComboBox=new JComboBox();
 		courseComboBox.setBounds(210,480,300,30);
 		courseComboBox.setFont(new Font("Arial",Font.PLAIN,20));
 		courseComboBox.setBorder(BorderFactory.createEmptyBorder());
@@ -177,7 +196,25 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 		create.addActionListener(this);
 		create.setFocusable(false);
 		this.add(create);
-
+                setComboBox();
+                
+                JLabel noAcc=new JLabel("Back to Login?");
+		noAcc.setBounds(290,560,200,30);
+		noAcc.setFont(new Font(null,Font.PLAIN,16));
+		this.add(noAcc);
+                
+                login=new JButton("Login");
+		login.setBounds(250,590,200,30);
+		login.setBackground(new Color(73, 79, 85));
+		login.setForeground(Color.WHITE);
+		login.addMouseListener(this);
+		login.setFont(new Font(null,Font.PLAIN,16));
+		login.setBorder(BorderFactory.createEmptyBorder());
+		login.addActionListener(this);
+		login.setFocusable(false);
+		this.add(login);
+                setComboBox();
+                
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(700,700);
 		this.setLocationRelativeTo(null);
@@ -186,6 +223,9 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
+            if(e.getSource()==create){
+                
+            
 		String username=usernameField.getText();
 		String email=emailField.getText();
 		String phoneNumber=phoneNumField.getText();
@@ -266,6 +306,10 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 				    	 try {
 			
                                                Conn c=new Conn();
+                                               String activityQuery="Insert into activity(activityName) values(?) ";
+                                               PreparedStatement statement=c.getPreparedStatement(activityQuery);
+                                                statement.setString(1,"New user "+username+" recently signed in.");
+                                                statement.executeUpdate();
                                                         //sending values to signup
                                                String query="insert into signup values('"+username.trim()+"','"+phoneNumber+"','"+userMode+"','"+new String(passwordChars)+"','"+email+"','"+studentCourse+"')";
                                                c.s.executeUpdate(query);
@@ -274,6 +318,8 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
                                                this.dispose();
                                                    switch(userMode){
                                                             case "Student":
+                                                                String resetIncrement="Alter table students AUTO_INCREMENT=1";
+                                                                c.s.execute(resetIncrement);
                                                                 String studentQuery="insert into students(studentName,email,phone,course) Values(?,?,?,?)";
                                                                 PreparedStatement stdSmt=c.getPreparedStatement(studentQuery);
                                                                 stdSmt.setString(1,username.trim());
@@ -281,15 +327,19 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
                                                                 stdSmt.setString(3,phoneNumber);
                                                                 stdSmt.setString(4, studentCourse);
                                                                 stdSmt.executeUpdate();
+                                                                break;
                                                                         
                                                             case "Teacher":
+                                                                
+                                                                String resetTeacherIncrement="Alter table tutors AUTO_INCREMENT=1";
+                                                                c.s.execute(resetTeacherIncrement);
                                                                 String teacherQuery = "INSERT INTO tutors (tutorName, email, phone) VALUES (?, ?, ?)";
                                                                 PreparedStatement teacherStmt = c.getPreparedStatement(teacherQuery);
                                                                 teacherStmt.setString(1, username.trim());
                                                                 teacherStmt.setString(2, email);
                                                                 teacherStmt.setString(3, phoneNumber);
                                                                 teacherStmt.executeUpdate();
-                                                              
+                                                                break;
                                                                 }
                                                             
                                                                 
@@ -304,6 +354,11 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 				    }
 				   
 			}
+            }
+            else if(e.getSource()==login){
+                this.dispose();
+                new LoginPanel();
+            }
 			}
 	
 	@Override
@@ -331,6 +386,10 @@ public class Signup extends JFrame implements ActionListener,MouseListener,ItemL
 		if(e.getSource()==create) {
 			create.setBackground(Color.black);
 			create.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}
+                else if(e.getSource()==login) {
+			login.setBackground(Color.black);
+			login.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		}
 	}
 

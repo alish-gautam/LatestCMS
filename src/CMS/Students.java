@@ -8,7 +8,9 @@ import javax.swing.ImageIcon;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author Acer
@@ -80,7 +82,7 @@ public class Students extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         studentsTitle = new javax.swing.JLabel();
         studentSearch = new javax.swing.JTextField();
-        addStudent = new javax.swing.JButton();
+        editStudent = new javax.swing.JButton();
         deleteStudent = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -208,7 +210,7 @@ public class Students extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Id", "Student Name", "Phone", "Email", "Course"
+                "Id", "Username", "Phone", "Email", "Course"
             }
         ));
         jTable1.setGridColor(new java.awt.Color(153, 153, 153));
@@ -225,19 +227,25 @@ public class Students extends javax.swing.JFrame {
         studentsTitle.setFont(new java.awt.Font("Consolas", 0, 26)); // NOI18N
         studentsTitle.setText("Students");
 
-        addStudent.setBackground(new java.awt.Color(73, 79, 85));
-        addStudent.setForeground(new java.awt.Color(255, 255, 255));
-        addStudent.setText("Add");
-        addStudent.setFocusable(false);
-        addStudent.addActionListener(new java.awt.event.ActionListener() {
+        studentSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                studentSearchKeyReleased(evt);
+            }
+        });
+
+        editStudent.setBackground(new java.awt.Color(73, 79, 85));
+        editStudent.setForeground(new java.awt.Color(255, 255, 255));
+        editStudent.setText("Edit Student");
+        editStudent.setFocusable(false);
+        editStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addStudentActionPerformed(evt);
+                editStudentActionPerformed(evt);
             }
         });
 
         deleteStudent.setBackground(new java.awt.Color(73, 79, 85));
         deleteStudent.setForeground(new java.awt.Color(255, 255, 255));
-        deleteStudent.setText("Delete");
+        deleteStudent.setText("Delete Student");
         deleteStudent.setFocusable(false);
         deleteStudent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,9 +274,9 @@ public class Students extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(studentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(70, 70, 70)
-                                .addComponent(addStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(65, 65, 65)
-                                .addComponent(deleteStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(editStudent)
+                                .addGap(47, 47, 47)
+                                .addComponent(deleteStudent))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(104, 104, 104)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -283,7 +291,7 @@ public class Students extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(studentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addStudent)
+                    .addComponent(editStudent)
                     .addComponent(deleteStudent)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -338,26 +346,70 @@ public class Students extends javax.swing.JFrame {
 
     private void deleteStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStudentActionPerformed
         // TODO add your handling code here:
+        if(userMode.equals("Admin")){
+            int selectedRow=jTable1.getSelectedRow();
+            if(selectedRow==-1){
+                JOptionPane.showMessageDialog(this, "Select a student to delete");
+            }
+            else{
+                int studentId=(int)jTable1.getValueAt(selectedRow,0);
+                String studentName=(String)jTable1.getValueAt(selectedRow, 1);
+                int confirmDialogResult=JOptionPane.showConfirmDialog(this,"Are you sure you want to delete this student?"
+                        ,"Confirm Deletion!",JOptionPane.YES_NO_OPTION);
+                if(confirmDialogResult==JOptionPane.YES_OPTION){
+                    try{
+                        Conn c=new Conn();
+                        String signupQuery="delete from signup where username='"+studentName+"'";
+                        c.s.executeUpdate(signupQuery);
+                        String query="delete from students where id='"+studentId+"'";
+                        c.s.executeUpdate(query);
+                        populateTable();
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        }
+        else{
+               JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);        
+        }
     }//GEN-LAST:event_deleteStudentActionPerformed
 
-    private void addStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStudentActionPerformed
+    private void editStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editStudentActionPerformed
         // TODO add your handling code here:
           if(userMode.equals("Admin")){
-            AddStudent addStudentFrame=new AddStudent();
-            addStudentFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-            addStudentFrame.setVisible(true);
+              int selectedRow=jTable1.getSelectedRow();
+              if(selectedRow==-1){
+                  JOptionPane.showMessageDialog(this, "Please select a student to edit");
+              }
+              else{
+                  EditStudents editStudentFrame=new EditStudents(jTable1);
+                editStudentFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+                editStudentFrame.setVisible(true);
             
-            addStudentFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+                editStudentFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+                public void windowClosed(java.awt.event.WindowEvent evt) {
                 // After the AddCourse frame is closed, update the table
                 populateTable();
-            }
+                }
         });
+              }
+            
         }
         else{
             JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_addStudentActionPerformed
+    }//GEN-LAST:event_editStudentActionPerformed
+
+    private void studentSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_studentSearchKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel model=(DefaultTableModel)jTable1.getModel();
+        TableRowSorter<DefaultTableModel> obj=new TableRowSorter<>(model);
+        jTable1.setRowSorter(obj);
+        obj.setRowFilter(RowFilter.regexFilter(studentSearch.getText()));
+    }//GEN-LAST:event_studentSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -395,10 +447,10 @@ public class Students extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addStudent;
     private javax.swing.JLabel appName;
     private javax.swing.JButton courses;
     private javax.swing.JButton deleteStudent;
+    private javax.swing.JButton editStudent;
     private javax.swing.JButton home;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -7,6 +7,12 @@ package CMS;
 import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -24,8 +30,29 @@ public class Tutors extends javax.swing.JFrame {
         this.setTitle("Tutors");
         this.setLocationRelativeTo(null);
         tutors.doClick();
+        populateTable();
     }
-
+    private void populateTable(){
+        Conn c=new Conn();
+        try{
+            String query="Select * from tutors";
+            ResultSet rs=c.s.executeQuery(query);
+            DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            while(rs.next()){
+                Object[] row={
+                    rs.getInt("id"),
+                    rs.getString("tutorName"),
+                    rs.getString("email"),
+                    rs.getLong("phone")
+                };
+                model.addRow(row);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,6 +75,13 @@ public class Tutors extends javax.swing.JFrame {
         tutors = new javax.swing.JButton();
         students = new javax.swing.JButton();
         logout = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        tutorsSearch = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        editTutor = new javax.swing.JButton();
+        deleteTutor = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -164,17 +198,101 @@ public class Tutors extends javax.swing.JFrame {
                 .addContainerGap(252, Short.MAX_VALUE))
         );
 
+        jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Username", "Email", "Course"
+            }
+        ));
+        jTable1.setGridColor(new java.awt.Color(204, 204, 204));
+        jTable1.setIntercellSpacing(new java.awt.Dimension(5, 5));
+        jTable1.setRowHeight(30);
+        jTable1.setShowGrid(false);
+        jTable1.setShowVerticalLines(true);
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel1.setFont(new java.awt.Font("Consolas", 0, 26)); // NOI18N
+        jLabel1.setText("Tutors");
+
+        tutorsSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tutorsSearchActionPerformed(evt);
+            }
+        });
+        tutorsSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tutorsSearchKeyReleased(evt);
+            }
+        });
+
+        jLabel2.setText("Search:");
+
+        editTutor.setBackground(new java.awt.Color(73, 79, 85));
+        editTutor.setForeground(new java.awt.Color(255, 255, 255));
+        editTutor.setText("Edit Tutor");
+        editTutor.setFocusable(false);
+        editTutor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editTutorActionPerformed(evt);
+            }
+        });
+
+        deleteTutor.setBackground(new java.awt.Color(73, 79, 85));
+        deleteTutor.setForeground(new java.awt.Color(255, 255, 255));
+        deleteTutor.setText("Delete tutor");
+        deleteTutor.setFocusable(false);
+        deleteTutor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteTutorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(sidebar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 884, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(128, 128, 128))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tutorsSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(42, 42, 42)
+                                .addComponent(editTutor, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(deleteTutor, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sidebar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tutorsSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(editTutor)
+                    .addComponent(deleteTutor))
+                .addGap(41, 41, 41)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -222,6 +340,79 @@ public class Tutors extends javax.swing.JFrame {
         log.setForeground(Color.white);
     }//GEN-LAST:event_logoutActionPerformed
 
+    private void tutorsSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tutorsSearchActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_tutorsSearchActionPerformed
+
+    private void editTutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTutorActionPerformed
+        // TODO add your handling code here:
+       
+        if(userMode.equals("Admin")){
+            int selectedRow=jTable1.getSelectedRow();
+            if(selectedRow==-1)
+            {
+                JOptionPane.showMessageDialog(this, "Please choose a tutor to edit");
+            }
+            else{
+                EditTutor editTutor=new EditTutor(jTable1);
+                editTutor.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+                editTutor.setVisible(true);
+            
+                editTutor.addWindowListener(new java.awt.event.WindowAdapter(){
+                public void windowClosed(java.awt.event.WindowEvent evt) {
+                // After the AddCourse frame is closed, update the table
+                populateTable();
+            }
+            });
+            }
+
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        
+    }//GEN-LAST:event_editTutorActionPerformed
+
+    private void deleteTutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteTutorActionPerformed
+        // TODO add your handling code here:
+        if(userMode.equals("Admin")){
+            int selectedRow=jTable1.getSelectedRow();
+            if(selectedRow==-1){
+                JOptionPane.showMessageDialog(this, "Select a tutor to delete");
+            }
+            else{
+                int tutorId=(int)jTable1.getValueAt(selectedRow,0);
+                String tutorName=(String)jTable1.getValueAt(selectedRow, 1);
+                int confirmDialogResult=JOptionPane.showConfirmDialog(this,"Are you sure you want to delete this tutor?"
+                        ,"Confirm Deletion!",JOptionPane.YES_NO_OPTION);
+                if(confirmDialogResult==JOptionPane.YES_OPTION){
+                    try{
+                        Conn c=new Conn();
+                        String signupQuery="delete from signup where username='"+tutorName+"'";
+                        c.s.executeUpdate(signupQuery);
+                        String query="delete from tutors where id='"+tutorId+"'";
+                        c.s.executeUpdate(query);
+                        populateTable();
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+            
+        }
+    }//GEN-LAST:event_deleteTutorActionPerformed
+
+    private void tutorsSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tutorsSearchKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel model =(DefaultTableModel)jTable1.getModel();
+        TableRowSorter<DefaultTableModel> obj=new TableRowSorter<>(model);
+        jTable1.setRowSorter(obj);
+        obj.setRowFilter(RowFilter.regexFilter(tutorsSearch.getText()));
+    }//GEN-LAST:event_tutorsSearchKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -260,11 +451,18 @@ public class Tutors extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel appName;
     private javax.swing.JButton courses;
+    private javax.swing.JButton deleteTutor;
+    private javax.swing.JButton editTutor;
     private javax.swing.JButton home;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JButton logout;
     private javax.swing.JPanel sidebar;
     private javax.swing.JButton students;
     private javax.swing.JLabel titleImage;
     private javax.swing.JButton tutors;
+    private javax.swing.JTextField tutorsSearch;
     // End of variables declaration//GEN-END:variables
 }

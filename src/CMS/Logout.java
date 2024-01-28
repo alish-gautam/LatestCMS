@@ -47,6 +47,7 @@ public class Logout extends javax.swing.JFrame {
         no = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         setSize(new java.awt.Dimension(1069, 702));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N

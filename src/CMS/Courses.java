@@ -94,6 +94,7 @@ public class Courses extends javax.swing.JFrame {
         menuBar1.add(menu2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         setSize(new java.awt.Dimension(1069, 702));
 
         sidebar.setBackground(new java.awt.Color(153, 153, 153));
