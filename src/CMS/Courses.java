@@ -79,6 +79,7 @@ public class Courses extends javax.swing.JFrame {
         tutors = new javax.swing.JButton();
         students = new javax.swing.JButton();
         logout = new javax.swing.JButton();
+        module = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         searchField = new javax.swing.JTextField();
@@ -166,6 +167,18 @@ public class Courses extends javax.swing.JFrame {
             }
         });
 
+        module.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        module.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purpose.png"))); // NOI18N
+        module.setText("Modules");
+        module.setFocusable(false);
+        module.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        module.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        module.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moduleActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout sidebarLayout = new javax.swing.GroupLayout(sidebar);
         sidebar.setLayout(sidebarLayout);
         sidebarLayout.setHorizontalGroup(
@@ -185,7 +198,8 @@ public class Courses extends javax.swing.JFrame {
                             .addComponent(tutors, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(courses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(module, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         sidebarLayout.setVerticalGroup(
@@ -200,12 +214,14 @@ public class Courses extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(courses, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(module, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tutors, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(students, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
@@ -318,7 +334,7 @@ public class Courses extends javax.swing.JFrame {
                     .addComponent(deleteCourse))
                 .addGap(46, 46, 46)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         pack();
@@ -429,6 +445,8 @@ public class Courses extends javax.swing.JFrame {
                 if(confirmDialogResult==JOptionPane.YES_OPTION){
                     try{
                         Conn c=new Conn();
+                        String resetIncrement="Alter table courses AUTO_INCREMENT=1";
+                        c.s.execute(resetIncrement);
                         String query="delete from courses where id='"+courseId+"'";
                         c.s.executeUpdate(query);
                         populateTable();
@@ -454,6 +472,14 @@ public class Courses extends javax.swing.JFrame {
         obj.setRowFilter(RowFilter.regexFilter(searchField.getText()));
         
     }//GEN-LAST:event_searchFieldKeyReleased
+
+    private void moduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moduleActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new Modules(userMode).setVisible(true);
+        module.setBackground(new Color(255, 104, 104));
+        module.setForeground(Color.white);
+    }//GEN-LAST:event_moduleActionPerformed
   
     /**
      * @param args the command line arguments
@@ -503,6 +529,7 @@ public class Courses extends javax.swing.JFrame {
     private java.awt.Menu menu1;
     private java.awt.Menu menu2;
     private java.awt.MenuBar menuBar1;
+    private javax.swing.JButton module;
     private javax.swing.JTextField searchField;
     private javax.swing.JLabel searchLabel;
     private javax.swing.JPanel sidebar;

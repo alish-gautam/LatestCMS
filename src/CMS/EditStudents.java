@@ -5,6 +5,7 @@
 package CMS;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -167,10 +168,16 @@ public class EditStudents extends javax.swing.JFrame {
         String email=emailField.getText();
         String phone=phoneNumField.getText();
         String course=courseComboBox.getSelectedItem().toString();
+        String emailRegex="[a-zA-z0-9_\\-\\.]+[@][a-z]+[\\.][a-z]{2,3}";
+        Pattern emailPattern=Pattern.compile(emailRegex);
+      
         try{
             if(studentName.equals("")||email.equals("")||phone.equals("")){
                 JOptionPane.showMessageDialog(this, "Invalid Input");
                 return;
+            }
+            else if(!emailPattern.matcher(email).matches()){
+                JOptionPane.showMessageDialog(this, "Invalid Email");
             }
             else{
                 Conn c=new Conn();

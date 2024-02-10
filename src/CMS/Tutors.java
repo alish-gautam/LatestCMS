@@ -31,6 +31,13 @@ public class Tutors extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         tutors.doClick();
         populateTable();
+        createReport();
+    }
+    private void createReport(){
+        createReport.setVisible(false);
+        if(userMode.equals("Teacher")){
+            createReport.setVisible(true);
+        }
     }
     private void populateTable(){
         Conn c=new Conn();
@@ -75,6 +82,7 @@ public class Tutors extends javax.swing.JFrame {
         tutors = new javax.swing.JButton();
         students = new javax.swing.JButton();
         logout = new javax.swing.JButton();
+        module = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -82,6 +90,7 @@ public class Tutors extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         editTutor = new javax.swing.JButton();
         deleteTutor = new javax.swing.JButton();
+        createReport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -156,6 +165,18 @@ public class Tutors extends javax.swing.JFrame {
             }
         });
 
+        module.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        module.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purpose.png"))); // NOI18N
+        module.setText("Modules");
+        module.setFocusable(false);
+        module.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        module.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        module.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moduleActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout sidebarLayout = new javax.swing.GroupLayout(sidebar);
         sidebar.setLayout(sidebarLayout);
         sidebarLayout.setHorizontalGroup(
@@ -175,7 +196,8 @@ public class Tutors extends javax.swing.JFrame {
                             .addComponent(tutors, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(courses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(module, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         sidebarLayout.setVerticalGroup(
@@ -190,12 +212,14 @@ public class Tutors extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(courses, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(module, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tutors, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(students, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(252, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
@@ -245,11 +269,22 @@ public class Tutors extends javax.swing.JFrame {
 
         deleteTutor.setBackground(new java.awt.Color(73, 79, 85));
         deleteTutor.setForeground(new java.awt.Color(255, 255, 255));
-        deleteTutor.setText("Delete tutor");
+        deleteTutor.setText("Delete Tutor");
         deleteTutor.setFocusable(false);
         deleteTutor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteTutorActionPerformed(evt);
+            }
+        });
+
+        createReport.setBackground(new java.awt.Color(102, 255, 102));
+        createReport.setForeground(new java.awt.Color(102, 102, 102));
+        createReport.setText("Create a Student Report");
+        createReport.setFocusable(false);
+        createReport.setVerifyInputWhenFocusTarget(false);
+        createReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createReportActionPerformed(evt);
             }
         });
 
@@ -259,24 +294,25 @@ public class Tutors extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(sidebar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
+                .addGap(90, 90, 90)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(128, 128, 128))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
+                        .addComponent(jLabel1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(2, 2, 2)
                                 .addComponent(tutorsSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(42, 42, 42)
+                                .addGap(28, 28, 28)
                                 .addComponent(editTutor, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
-                                .addComponent(deleteTutor, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(28, 28, 28)
+                                .addComponent(deleteTutor, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                                .addComponent(createReport)))
+                        .addGap(79, 79, 79))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,13 +322,14 @@ public class Tutors extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tutorsSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tutorsSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(editTutor)
+                    .addComponent(createReport)
                     .addComponent(deleteTutor))
                 .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         pack();
@@ -403,6 +440,9 @@ public class Tutors extends javax.swing.JFrame {
             }
             
         }
+        else{
+             JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_deleteTutorActionPerformed
 
     private void tutorsSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tutorsSearchKeyReleased
@@ -412,6 +452,26 @@ public class Tutors extends javax.swing.JFrame {
         jTable1.setRowSorter(obj);
         obj.setRowFilter(RowFilter.regexFilter(tutorsSearch.getText()));
     }//GEN-LAST:event_tutorsSearchKeyReleased
+
+    private void createReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createReportActionPerformed
+        // TODO add your handling code here:
+        if(userMode.equals("Teacher")){
+            CreateReport report=new CreateReport();
+            report.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            report.setVisible(true);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_createReportActionPerformed
+
+    private void moduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moduleActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new Modules(userMode).setVisible(true);
+        module.setBackground(new Color(255, 104, 104));
+        module.setForeground(Color.white);
+    }//GEN-LAST:event_moduleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -451,6 +511,7 @@ public class Tutors extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel appName;
     private javax.swing.JButton courses;
+    private javax.swing.JButton createReport;
     private javax.swing.JButton deleteTutor;
     private javax.swing.JButton editTutor;
     private javax.swing.JButton home;
@@ -459,6 +520,7 @@ public class Tutors extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton logout;
+    private javax.swing.JButton module;
     private javax.swing.JPanel sidebar;
     private javax.swing.JButton students;
     private javax.swing.JLabel titleImage;

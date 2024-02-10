@@ -7,6 +7,7 @@ package CMS;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import java.sql.*;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -143,8 +144,14 @@ public class EditTutor extends javax.swing.JFrame {
         String tutorName=tutorField.getText();
         String email=emailField.getText();
         String phoneNum=phoneField.getText();
+        String emailRegex="[a-zA-z0-9_\\-\\.]+[@][a-z]+[\\.][a-z]{2,3}";
+        Pattern emailPattern=Pattern.compile(emailRegex);
             if(tutorName.equals("")||emailField.equals("")||phoneField.equals("")){
                 JOptionPane.showMessageDialog(this, "Invalid Input");
+                return;
+            }
+            else if(!emailPattern.matcher(email).matches()){
+                JOptionPane.showMessageDialog(this, "Invalid Email");
                 return;
             }
             else{

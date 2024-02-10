@@ -78,6 +78,7 @@ public class Students extends javax.swing.JFrame {
         tutors = new javax.swing.JButton();
         students = new javax.swing.JButton();
         logout = new javax.swing.JButton();
+        module = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         studentsTitle = new javax.swing.JLabel();
@@ -85,6 +86,7 @@ public class Students extends javax.swing.JFrame {
         editStudent = new javax.swing.JButton();
         deleteStudent = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        viewProgress = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -159,6 +161,18 @@ public class Students extends javax.swing.JFrame {
             }
         });
 
+        module.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        module.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/purpose.png"))); // NOI18N
+        module.setText("Modules");
+        module.setFocusable(false);
+        module.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        module.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        module.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moduleActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout sidebarLayout = new javax.swing.GroupLayout(sidebar);
         sidebar.setLayout(sidebarLayout);
         sidebarLayout.setHorizontalGroup(
@@ -178,7 +192,8 @@ public class Students extends javax.swing.JFrame {
                             .addComponent(tutors, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(courses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(module, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         sidebarLayout.setVerticalGroup(
@@ -193,12 +208,14 @@ public class Students extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(courses, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tutors, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(module, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tutors, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
                 .addComponent(students, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(253, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTable1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
@@ -255,6 +272,16 @@ public class Students extends javax.swing.JFrame {
 
         jLabel1.setText("Search:");
 
+        viewProgress.setBackground(new java.awt.Color(73, 79, 85));
+        viewProgress.setForeground(new java.awt.Color(255, 255, 255));
+        viewProgress.setText("View Progress");
+        viewProgress.setFocusable(false);
+        viewProgress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewProgressActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -267,19 +294,19 @@ public class Students extends javax.swing.JFrame {
                         .addComponent(studentsTitle)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(104, 104, 104)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(143, 143, 143)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(studentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(70, 70, 70)
+                                .addGap(40, 40, 40)
                                 .addComponent(editStudent)
-                                .addGap(47, 47, 47)
-                                .addComponent(deleteStudent))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(104, 104, 104)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(49, 49, 49)
+                                .addComponent(deleteStudent)
+                                .addGap(43, 43, 43)
+                                .addComponent(viewProgress))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(122, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -293,8 +320,9 @@ public class Students extends javax.swing.JFrame {
                     .addComponent(studentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(editStudent)
                     .addComponent(deleteStudent)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addComponent(viewProgress))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(61, 61, 61))
         );
@@ -411,6 +439,26 @@ public class Students extends javax.swing.JFrame {
         obj.setRowFilter(RowFilter.regexFilter(studentSearch.getText()));
     }//GEN-LAST:event_studentSearchKeyReleased
 
+    private void viewProgressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewProgressActionPerformed
+        // TODO add your handling code here:
+        if(userMode.equals("Admin")){
+            ViewProgress progress=new ViewProgress();
+            progress.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            progress.setVisible(true);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "404 ACCESS DENIED!!", "ACCESS FAILED", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_viewProgressActionPerformed
+
+    private void moduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moduleActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new Modules(userMode).setVisible(true);
+        module.setBackground(new Color(255, 104, 104));
+        module.setForeground(Color.white);
+    }//GEN-LAST:event_moduleActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -456,11 +504,13 @@ public class Students extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton logout;
+    private javax.swing.JButton module;
     private javax.swing.JPanel sidebar;
     private javax.swing.JTextField studentSearch;
     private javax.swing.JButton students;
     private javax.swing.JLabel studentsTitle;
     private javax.swing.JLabel titleImage;
     private javax.swing.JButton tutors;
+    private javax.swing.JButton viewProgress;
     // End of variables declaration//GEN-END:variables
 }
